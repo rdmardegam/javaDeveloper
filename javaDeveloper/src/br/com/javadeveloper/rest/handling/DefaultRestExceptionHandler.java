@@ -8,6 +8,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 
+import org.apache.log4j.Logger;
+
 import br.com.javadeveloper.rest.message.ErrorMessageRest;
 /**
  * Handle default de erro caso o erro nao seja capturado por nenhum handle propositalmente ou ocorra um erro na aplicacao
@@ -15,6 +17,9 @@ import br.com.javadeveloper.rest.message.ErrorMessageRest;
  * */
 public class DefaultRestExceptionHandler implements ExceptionMapper<Throwable> {
 
+	/** Logger */
+	private static final Logger LOGGER = Logger.getLogger(DefaultRestExceptionHandler.class);
+	
 	public Response toResponse(Throwable ex) {
 		ErrorMessageRest errorMessage = new ErrorMessageRest();		
 		setHttpStatus(ex, errorMessage);
@@ -31,7 +36,9 @@ public class DefaultRestExceptionHandler implements ExceptionMapper<Throwable> {
 		errorMessage.setMensagemDesenvolvedor(errorStackTrace.toString());
 		// local web
 		errorMessage.setLink("http:\\javadeveloper\rest");
-				
+		
+		LOGGER.error(errorStackTrace);
+		
 		return Response.status(errorMessage.getStatus())
 				.entity(errorMessage)
 				.type(MediaType.APPLICATION_JSON)

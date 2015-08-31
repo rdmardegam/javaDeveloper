@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration PUBLIC
+  "-//APACHE//DTD LOG4J 1.2//EN" "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+<log4j:configuration>
+
+	<appender name="javaDeveloperFile" class="org.apache.log4j.RollingFileAppender">
+		<param name="File" value="${SERVER_LOG_ROOT}/javaDeveloper.log" />
+		<param name="encoding" value="UTF-8" />
+		<param name="MaxFileSize" value="5MB" />
+		<param name="MaxBackupIndex" value="5" />
+		<param name="Append" value="true" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd/MM/yy HH:mm:ss} %-5p [%c{4}:%M] %m%n" />
+		</layout>
+	</appender>
+
+	<logger name="org.ajax4jsf">
+		<level value="fatal" />
+	</logger>
+
+	<logger name="org.apache.commons">
+		<level value="fatal" />
+	</logger>
+	
+	<logger name="javax.enterprise">
+		<level value="fatal" />
+	</logger>
+	
+	<logger name="javax.ejb">
+		<level value="fatal" />
+	</logger>
+
+	<logger name="javax.servlet">
+		<level value="fatal" />
+	</logger>
+
+	<root>
+		<priority value="DEBUG" />
+		<appender-ref ref="javaDeveloperFile" />
+	</root>
+
+</log4j:configuration>
