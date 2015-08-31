@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="EnderecoDAO">
+  
+	<!-- Fragmentos -->
+	<sql id="ENDERECO_FRAG_SQL">
+		<![CDATA[
+           SELECT	
+                endereco.id   as id,
+            	endereco.numero as numero,
+                endereco.complemento as complemento,
+                
+                cep.cep as cep_cep,
+            	cep.rua as cep_rua,
+            	cep.bairro as cep_bairro,
+            	cep.cidade as cep_cidade,
+            	cep.estado as cep_estado
+                
+            FROM  cep 
+            
+            INNER JOIN endereco
+				ON endereco.cepId = cep.id
+      	]]>		
+	</sql>
+	
+	
+		
+	<!-- Selects -->
+	<select id="find" resultMap="EnderecoDTO_ResultMap">
+		<include refid="ENDERECO_FRAG_SQL"/>
+		<where>
+			endereco.id = #{id,jdbcType=INTEGER}
+		</where>
+	</select>
+	
+	
+	<!-- Inserts -->
+	<insert id="insert">
+		INSERT INTO endereco
+			(numero, complemento, cepId)
+		VALUES
+			(#{numero}, #{complemento}, #{cepInfo.id})
+	</insert>
+	
+	
+	<!-- Updates -->
+	<update id="update">
+		UPDATE endereco
+			set
+			numero = #{numero},
+			complemento = #{complemento},
+			cepId = #{cepInfo.id}
+		<where>
+			id = #{id}
+		</where>	
+	</update>
+	
+	
+	<!-- Delete -->
+	<delete id="delete"> 
+		DELETE FROM endereco
+		<where>
+			id = #{id,jdbcType=INTEGER}
+		</where> 
+	</delete>
+	
+	
+	<!-- Mapeamento -->
+	<resultMap id="EnderecoDTO_ResultMap" type="EnderecoDTO" autoMapping="true">
+		<id property="id" column="id" />
+		<association property="cepInfo" autoMapping="true" resultMap="CepDTO_ResultMap" columnPrefix="cep_"/>
+	</resultMap>
+	
+	<resultMap id="CepDTO_ResultMap" type="CepDTO" autoMapping="true">
+		<id property="cep" column="cep" />
+	</resultMap>
+	
+
+</mapper>

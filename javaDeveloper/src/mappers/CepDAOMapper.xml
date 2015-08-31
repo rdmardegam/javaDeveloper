@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="CepDAO">
+  
+	<!-- Fragmentos -->
+	<sql id="CEP_FRAG_SQL">
+		<![CDATA[
+            SELECT	id,
+            		cep,
+            		rua,
+            		bairro,
+            		cidade,
+            		estado
+            FROM  cep cep
+      	]]>		
+	</sql>
+	
+		
+	<!-- Selects -->
+	<select id="findByCep" resultMap="CepDTO_ResultMap">
+		<include refid="CEP_FRAG_SQL"/>
+		<where>
+			cep = ${cepFilter}
+		</where>
+	</select>
+	
+	<select id="find" resultMap="CepDTO_ResultMap">
+		<include refid="CEP_FRAG_SQL"/>
+		<where>
+			id = ${id}
+		</where>
+	</select>
+	
+	
+		
+	<!-- Updates -->
+	<update id="update">
+		UPDATE cep
+			set
+				cep = #{cep},
+				rua = #{rua},
+				bairro = #{bairro},
+				cidade = #{cidade},
+				estado = #{estado}
+		<where>
+			cep = ${cep}
+		</where>	
+	</update>
+	
+	<!-- Mapeamento -->
+	<resultMap id="CepDTO_ResultMap" type="CepDTO" autoMapping="true">
+		<id property="cep" column="cep" />
+	</resultMap>
+	
+
+</mapper>
